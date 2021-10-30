@@ -3,44 +3,23 @@
         <script>
             //Make a Car class with gas field and prototype method "go" which prints "vroom vroom!" if you have gas left, reducing gas by 1. Otherwise it
             //will print "Out of gas :(". Make a "refill" prototype method that takes in an integer of gas to refill, and adds that to your gas.
-            /*
-            take each number in as a main value and set the valued pair to 1 if its new
-            if it already exists in the map then increment the valued pair
-
-            iterate through the map and find the highest valued pair
-            return the main value of the valued pair
-            */
-            function most(arr){
-                let pair = new Map();       //creating a map in a new memory location
-                for(let i = 0;i<arr.length;i++){
-                    if(pair.has(arr[i])){       //populate the map with values from the array
-                        pair.set(arr[i],(pair.get(arr[i])+1));  //if the array has the key, increase the value by 1
-                    }
-                    else{pair.set(arr[i],1);}   //if the array does not have a key equal to the array at index, add it into the map and set value to 1
+            function Car(){
+                this.gas = 5
+            }
+            Car.prototype.go = function(){
+                if(this.gas!=0){
+                    console.log("vroom vroom!");
+                    this.gas-=1;
                 }
-                let text ="";
-                let highest = 0;
-                pair.forEach (function(value, key) {    //go through the map
-                    if(value>highest){                  //find the highest occuring element, if there is a value higher
-                        highest = value;                //it is the new highest value
-                        text = ""+key;                  //it is the key we want to return
-                    }else if(value == highest){
-                        text+=" "+key;                  //if there is another key with an equal value add it to the string
-                    }
-                })
-                return "the highest occuring elements are: "+ text +" with an occurence rate of: "+highest;
-
+                else{
+                    console.log("Out of gas :(");
+                }
             }
-            function main(){
-                let arr = [0,0,0,4,5,5,5,1,2,43,15,6,8,2,1,87,5,3,4,2,1,36,4,2,8,4,3,87,2,1,73,2,14,9,7,5,1,74];
-                let out = most(arr)
-                let output = document.getElementById("container");
-                output.innerHTML="Integer array<br>"+arr+"<br>"+out;
-                arr = [" ","a","ab","a","ab","a","ba","bab"];
-                out = most(arr);
-                output.innerHTML+="<br><br>String array<br>"+arr+"<br>"+out;
-
+            Car.prototype.refill= function(inc){
+                this.gas+=inc;
             }
+            let bobTheCar = new Car();
+
 
         </script>
 
@@ -48,8 +27,9 @@
     </head>
     <div id = "container"></div>
 
-    <body onload="main()">
-
+    <body>
+        <button type="button" onclick=bobTheCar.go()>Vroom!</button>
+        <button type="button" onclick=bobTheCar.refill(3)>refill!</button>
     </body>
 
 </html>
