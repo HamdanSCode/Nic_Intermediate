@@ -15,70 +15,68 @@ get at index
                 //next node
             }
             function List(){
-                this.head = new Node(null);     //create a head node with data given to initialize the initial node
-                this.current = this.head;       //sets current node to the first made node, head
+                this.head = null;     //create a head node with data given to initialize the initial node
+                                      //sets current node to the first made node, head
             }
             List.prototype.add = function(data){
                 //append a node with data to the end of the list
-                if(this.current.data==null){
-                    this.current.data = data;
+                let mover = this.head;
+                if(this.head==null){        //if head is empty we will fill it smile :)
+                    this.head = new Node(data);
                     return;
                 }
-                while(this.current.next!= null){
-                    this.current = this.current.next;
+                while(mover.next!= null){
+                    mover = mover.next;
                 }
-                this.current.next = new Node(data);
-                this.current = this.head;
+                mover.next = new Node(data);
             }
 
             List.prototype.delete = function(index){
                 //connect the node before the index to the node after index
                 //then delete the node in between
+                let mover = this.head;
                 if(index == 0){
-                    this.head =this.current.next;
-                    this.current = null;
+                    this.head =mover.next;
+                    mover = null;
                 }
                 for(let i = 0; i<index;i++){
                     if(i==index-1){
-                        let xd = this.current.next;
-                        this.current.next = this.current.next.next;
+                        let xd = mover.next;
+                        mover.next = mover.next.next;
                         xd = null;
                     }
-                    this.current = this.current.next;
+                    mover = mover.next;
                 }
-                this.current = this.head;
-
             }
             List.prototype.insert = function(index,dataIn){
                 //create a node point it to the node after it in the index
                 //make the node before it point to the node
+                let mover = this.head;
                 for(let i = 0; i<index;i++){
-                    this.current = this.current.next;
+                    mover = mover.next;
                 }
-                let xd = this.current.next;
-                this.current.next = new Node(dataIn);
-                this.current = this.current.next;
-                this.current.next = xd;
-                this.current = this.head;
-
+                let xd = mover.next;
+                mover.next = new Node(dataIn);
+                mover = mover.next;
+                mover.next = xd;
             }
             List.prototype.get = function(index){
                 //get the data at the index
+                let mover = this.head;
                 for(let i = 0; i<index;i++){
-                    this.current = this.current.next;
+                    mover = mover.next;
                 }
-                let xd = this.current.data;
-                this.current = this.head;
+                let xd = mover.data;
                 return xd;
             }
             List.prototype.print = function(){
+                let mover = this.head;
                 let i = 0;
-                while(this.current!=null){
-                    console.log("at position: "+i+" the value is: "+this.current.data);
+                while(mover!=null){
+                    console.log("at position: "+i+" the value is: "+mover.data);
                     i++;
-                    this.current = this.current.next;
+                    mover = mover.next;
                 }
-                this.current = this.head;
             }
 
 
