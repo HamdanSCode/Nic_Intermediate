@@ -34,6 +34,9 @@ get at index
             List.prototype.delete = function(index){
                 //connect the node before the index to the node after index
                 //then delete the node in between
+                if(this.head == null){
+                    return;
+                }
                 let mover = this.head;
                 if(index == 0){
                     this.head =mover.next;
@@ -45,14 +48,28 @@ get at index
                         mover.next = mover.next.next;
                         xd = null;
                     }
-                    mover = mover.next;
+                    if(mover.next!=null){
+                        mover = mover.next;
+                    }else{
+                        console.log("exiting delete function as the index is out of range");
+                        return;
+                    }
+                    
                 }
             }
             List.prototype.insert = function(index,dataIn){
                 //create a node point it to the node after it in the index
                 //make the node before it point to the node
                 let mover = this.head;
+                if(this.head == null){
+                    console.log("exited insert as index is out of range");
+                    return;
+                }
                 for(let i = 0; i<index;i++){
+                    if(mover.next==null){
+                        console.log("did not insert at index because it's out of range");
+                        return;
+                    }
                     mover = mover.next;
                 }
                 let xd = mover.next;
@@ -64,6 +81,10 @@ get at index
                 //get the data at the index
                 let mover = this.head;
                 for(let i = 0; i<index;i++){
+                    if(mover.next==null){
+                        console.log("exiting get function as index is out of range");
+                        return;
+                    }
                     mover = mover.next;
                 }
                 let xd = mover.data;
