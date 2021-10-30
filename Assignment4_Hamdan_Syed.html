@@ -14,12 +14,16 @@ get at index
                 //data
                 //next node
             }
-            function List(data){
-                this.head = new Node(data);     //create a head node with data given to initialize the initial node
+            function List(){
+                this.head = new Node(null);     //create a head node with data given to initialize the initial node
                 this.current = this.head;       //sets current node to the first made node, head
             }
             List.prototype.add = function(data){
                 //append a node with data to the end of the list
+                if(this.current.data==null){
+                    this.current.data = data;
+                    return;
+                }
                 while(this.current.next!= null){
                     this.current = this.current.next;
                 }
@@ -79,7 +83,8 @@ get at index
 
 
             function main(){
-                let test = new List(1);
+                let test = new List();
+                test.add(1);
                 test.add(2);
                 test.add(3);
                 test.add(4);
