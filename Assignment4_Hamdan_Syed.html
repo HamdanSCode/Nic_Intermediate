@@ -1,0 +1,128 @@
+<html>
+    <head>
+        <script>
+/*
+add method
+delete at index
+insert at index
+get at index
+*/
+
+            function Node(dat){
+                this.data = dat;
+                this.next = null;
+                //data
+                //next node
+            }
+            function List(data){
+                this.head = new Node(data);     //create a head node with data given to initialize the initial node
+                this.current = this.head;       //sets current node to the first made node, head
+            }
+            List.prototype.add = function(data){
+                //append a node with data to the end of the list
+                while(this.current.next!= null){
+                    this.current = this.current.next;
+                }
+                this.current.next = new Node(data);
+                this.current = this.head;
+            }
+
+            List.prototype.delete = function(index){
+                //connect the node before the index to the node after index
+                //then delete the node in between
+                if(index == 0){
+                    this.head =this.current.next;
+                    this.current = null;
+                }
+                for(let i = 0; i<index;i++){
+                    if(i==index-1){
+                        let xd = this.current.next;
+                        this.current.next = this.current.next.next;
+                        xd = null;
+                    }
+                    this.current = this.current.next;
+                }
+                this.current = this.head;
+
+            }
+            List.prototype.insert = function(index,dataIn){
+                //create a node point it to the node after it in the index
+                //make the node before it point to the node
+                for(let i = 0; i<index;i++){
+                    this.current = this.current.next;
+                }
+                let xd = this.current.next;
+                this.current.next = new Node(dataIn);
+                this.current = this.current.next;
+                this.current.next = xd;
+                this.current = this.head;
+
+            }
+            List.prototype.get = function(index){
+                //get the data at the index
+                for(let i = 0; i<index;i++){
+                    this.current = this.current.next;
+                }
+                let xd = this.current.data;
+                this.current = this.head;
+                return xd;
+            }
+            List.prototype.print = function(){
+                let i = 0;
+                while(this.current!=null){
+                    console.log("at position: "+i+" the value is: "+this.current.data);
+                    i++;
+                    this.current = this.current.next;
+                }
+                this.current = this.head;
+            }
+
+
+            function main(){
+                let test = new List(1);
+                test.add(2);
+                test.add(3);
+                test.add(4);
+                test.add(5);
+                test.add(6);
+                test.add(7);
+                test.print();
+                test.insert(4,5.69);
+                console.log("now testing the insert function");
+                console.log("now testing the insert function");
+                test.print();
+                console.log("now testing the delete function at index 0");
+                console.log("now testing the delete function at index 0");
+                test.delete(0);
+                test.print();
+                console.log("now testing the delete function at index 2");
+                console.log("now testing the delete function at index 2");
+                test.delete(2);
+                test.print();
+                console.log("now testing the get function");
+                console.log("now testing the get function");
+                test.print();
+                console.log("The value at index 1 is: "+test.get(1));
+
+            }
+
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+    </head>
+    <div id = "container"></div>
+
+    <body onload="main()">
+
+    </body>
+
+</html>
