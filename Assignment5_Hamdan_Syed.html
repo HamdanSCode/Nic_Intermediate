@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <script>
+            //Make an ArrayList prototype class. This should include methods to add, delete at index, insert at index, and get at index. An ArrayList is a 
+            //structure with a resizing array that holds the values for the list. Look up the concept.
+            
+            function ArrayList(){
+                this.arrInternal = [];
+
+            }
+            ArrayList.prototype.add = function(incData){
+                if(this.arrInternal.length==0){                 //if the arraylist has no elements in it yet
+                    let newArray = [];
+                    newArray[0]=incData;
+                    this.arrInternal = newArray;
+                    return;
+                }
+                let newArray = [this.arrInternal.length+1]       //pretending i'm initializing an array with size one larger than the current array
+                for(let i = 0;i<=this.arrInternal.length;i++){  //copy values into the newly sized array
+                    if(i==this.arrInternal.length){
+                        newArray[i]=incData;                    //if were at the final element of the new Array, give it the incData
+                    }
+                    else{
+                        newArray[i]=this.arrInternal[i];
+                    }
+                }
+                this.arrInternal=newArray;
+            }
+
+            ArrayList.prototype.get = function(index){
+                if(this.arrInternal.length<index||index<0){console.log("Index is out of range returning null");return null;}  //if index is out of range
+                return this.arrInternal[index];     //return the value at index
+            }
+
+            ArrayList.prototype.delete = function(index){
+                if(index>this.arrInternal.length||index<0){console.log("index out of range exiting function");return;}         //if index is out of range
+                let newArray = [this.arrInternal.length-1];      //pretending i'm initializing an array with size one less than the current array
+                for(let i = 0; i<this.arrInternal.length;i++){
+                    if(i>index){
+                        newArray[i-1]=this.arrInternal[i];
+                    }else if(i==index){                         //just dont include the value at the index in the newly sized array
+                        //lmao we in the cut bois
+                    }
+                    else{
+                        newArray[i]=this.arrInternal[i];
+                    }
+                }
+                this.arrInternal=newArray;
+            }
+
+            ArrayList.prototype.insert = function(index,incData){
+                if(index>this.arrInternal.length||index<0){console.log("Index out of range exiting function");return;}
+                let newArray = [this.arrInternal.length+1]       //pretengind im initializing an array with a size one larger than the current array
+                for(let i = 0; i<this.arrInternal.length+1;i++){
+                    if(i>index){
+                        newArray[i]=this.arrInternal[i-1];
+                    } else if(i==index){                        //insert the data at the correct position
+                        newArray[i] = incData;
+                    }else{
+                        newArray[i]=this.arrInternal[i];
+                    }
+                }
+                this.arrInternal=newArray;
+            }
+
+            ArrayList.prototype.print = function(){
+                let outText = "";
+                if(this.arrInternal.length<1){return "There are no elements in the current Array List";}
+                for(let i = 0;i<this.arrInternal.length;i++){
+                    outText+=this.arrInternal[i]+" ";
+                }
+                return outText;
+            }
+            
+            function main(){
+                let arList = new ArrayList();
+                arList.add(1);
+                arList.add(2);
+                arList.add(3);
+                arList.add(4);
+                arList.add(5);
+                console.log(arList.print());
+                console.log("we are now testing insert at index 5");
+                arList.insert(5,"pog");
+                console.log(arList.print());
+                console.log("we are now testing insert at index 1");
+                arList.insert(1,"gop");
+                console.log(arList.print());
+                console.log("now testing delete at index 2");
+                arList.delete(2);
+                console.log(arList.print());
+                console.log("using get, the value at index -1 is: "+arList.get(-1));
+                console.log("using get, the value at index 3 is: "+arList.get(3));
+
+            }
+            
+            /*function Car(){
+                this.gas = 5
+            }
+            Car.prototype.go = function(){
+                if(this.gas!=0){
+                    console.log("vroom vroom!");
+                    this.gas-=1;
+                }
+                else{
+                    console.log("Out of gas :(");
+                }
+            }
+            Car.prototype.refill= function(inc){
+                this.gas+=inc;
+            }
+            let bobTheCar = new Car();*/
+
+
+        </script>
+
+
+    </head>
+    <div id = "container"></div>
+
+    <body onload="main()">
+        <button type="button" onclick=bobTheCar.go()>Vroom!</button>
+        <button type="button" onclick=bobTheCar.refill(3)>refill!</button>
+    </body>
+
+</html>
