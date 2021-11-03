@@ -1,0 +1,169 @@
+<html>
+    <head>
+        <script>
+/*
+add method
+delete at index
+insert at index
+get at index
+*/
+
+            function Node(dat){
+                this.data = dat;
+                this.next = null;
+                this.prev = null;
+                //data
+                //next node
+                //previous node
+            }
+            function List(){
+                this.head = null;     //create a head node with data given to initialize the initial node
+                                      //sets current node to the first made node, head
+            }
+            List.prototype.add = function(data){
+                //append a node with data to the end of the list
+                let mover = this.head;
+                if(this.head==null){        //if head is empty we will fill it smile :)
+                    this.head = new Node(data);
+                    return;
+                }
+                while(mover.next!= null){
+                    mover = mover.next;
+                }
+                mover.next = new Node(data);
+                mover.next.prev=mover;
+                console.log("inside add, mover: "+ mover.data);
+            }
+
+            List.prototype.delete = function(index){
+                //connect the node before the index to the node after index and connect the node after the index to the node before the index
+                //then delete the node in between
+                if(this.head == null){
+                    return;
+                }
+                let mover = this.head;
+                if(index == 0){
+                    this.head =mover.next;
+                    this.head.prev=null;
+                    mover = null;
+                }
+                for(let i = 0; i<index;i++){
+                    if(i==index-1){
+                        let xd = mover.next;
+                        mover.next = mover.next.next;
+                        mover.next.prev=mover;
+                        xd = null;
+                    }
+                    if(mover.next!=null){
+                        mover = mover.next;
+                    }else{
+                        console.log("exiting delete function as the index is out of range");
+                        return;
+                    }
+                    
+                }
+            }
+            List.prototype.insert = function(index,dataIn){
+                //create a node point it to the node after it in the index
+                //make the node before it point to the node
+                let mover = this.head;
+                if(this.head == null){
+                    console.log("exited insert as index is out of range");
+                    return;
+                }
+                for(let i = 0; i<index;i++){
+                    if(mover.next==null){
+                        console.log("did not insert at index because it's out of range");
+                        return;
+                    }
+                    mover = mover.next;
+                }
+                let xd = mover.next;
+                mover.next = new Node(dataIn);
+                mover.next.prev = mover;
+                mover = mover.next;
+                mover.next = xd;
+                if(xd!= null){xd.prev = mover;}
+
+            }
+            List.prototype.get = function(index){
+                //get the data at the index
+                let mover = this.head;
+                for(let i = 0; i<index;i++){
+                    if(mover.next==null){
+                        console.log("exiting get function as index is out of range");
+                        return;
+                    }
+                    mover = mover.next;
+                }
+                let xd = mover.data;
+                return xd;
+            }
+            List.prototype.print = function(){
+                let mover = this.head;
+                let text ="front to back: ";
+                while(mover.next!=null){
+                    text+="["+mover.data+"]->"
+                    mover=mover.next;
+                }
+                text+="["+mover.data+"]";
+                console.log(text);
+                text="back to front: ";
+                while(mover.prev!=null){
+                    text+="["+mover.data+"]->"
+                    mover=mover.prev;
+                }
+                text+="["+mover.data+"]";
+                console.log(text);
+            }
+
+
+            function main(){
+                let test = new List();
+                test.add(1);
+                test.add(2);
+                test.add(3);
+                test.add(4);
+                test.add(5);
+                test.add(6);
+                test.add(7);
+                test.print();
+                test.insert(4,5.69);
+                console.log("now testing the insert function at index 4");
+                console.log("now testing the insert function at index 4");
+                test.print();
+                console.log("now testing the delete function at index 0");
+                console.log("now testing the delete function at index 0");
+                test.delete(0);
+                test.print();
+                console.log("now testing the delete function at index 2");
+                console.log("now testing the delete function at index 2");
+                test.delete(2);
+                test.print();
+                console.log("now testing the get function");
+                console.log("now testing the get function");
+                test.print();
+                console.log("The value at index 1 is: "+test.get(1));
+
+            }
+
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+    </head>
+    <div id = "container"></div>
+
+    <body onload="main()">
+
+    </body>
+
+</html>
