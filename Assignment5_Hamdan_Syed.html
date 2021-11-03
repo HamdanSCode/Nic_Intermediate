@@ -6,67 +6,60 @@
             
             function ArrayList(){
                 this.arrInternal = [];
+                this.length = 0;        //length variable to keep track of array size to help simulate a fixed array size
 
             }
             ArrayList.prototype.add = function(incData){
-                if(this.arrInternal.length==0){                 //if the arraylist has no elements in it yet
+                if(this.length==0){                 //if the arraylist has no elements in it yet
                     let newArray = [];
                     newArray[0]=incData;
+                    this.length+=1;
                     this.arrInternal = newArray;
                     return;
                 }
-                let newArray = [this.arrInternal.length+1]       //pretending i'm initializing an array with size one larger than the current array
-                for(let i = 0;i<=this.arrInternal.length;i++){  //copy values into the newly sized array
-                    if(i==this.arrInternal.length){
-                        newArray[i]=incData;                    //if were at the final element of the new Array, give it the incData
+                for(let i = 0; i<this.length;i++){
+                    if(this.arrInternal[i]==undefined){this.arrInternal[i]=incData;return;}//if the array is large enough to fit in a new element, just add it in
+                }
+                let newArray = [this.length*2]       //pretending i'm initializing an array with size one larger than the current array
+                this.length*=2;
+                for(let i = 0;i<=this.arrInternal.length;i++){  //copy values into the newly sized array,can still use the old array size for this
+                    if(i==this.arrInternal.length){   //at the end of the old array length
+                        newArray[i]=incData;
+                        break;                        //give it the incData
                     }
                     else{
                         newArray[i]=this.arrInternal[i];
                     }
                 }
-                this.arrInternal=newArray;
+                this.arrInternal=newArray;          //pass back the new array to the internal array variable
             }
 
             ArrayList.prototype.get = function(index){
-                if(this.arrInternal.length<index||index<0){console.log("Index is out of range returning null");return null;}  //if index is out of range
-                return this.arrInternal[index];     //return the value at index
+                if(this.length<index||index<0){console.log("Index is out of range returning undefined");return undefined;}  //if index is out of range
+                return this.arrInternal[index];     //return the value at index including if its undefined as that is effectively an error state
             }
 
             ArrayList.prototype.delete = function(index){
-                if(index>this.arrInternal.length||index<0){console.log("index out of range exiting function");return;}         //if index is out of range
-                let newArray = [this.arrInternal.length-1];      //pretending i'm initializing an array with size one less than the current array
-                for(let i = 0; i<this.arrInternal.length;i++){
-                    if(i>index){
-                        newArray[i-1]=this.arrInternal[i];
-                    }else if(i==index){                         //just dont include the value at the index in the newly sized array
-                        //lmao we in the cut bois
-                    }
-                    else{
-                        newArray[i]=this.arrInternal[i];
-                    }
+                if(index>this.length||index<0){console.log("index out of range returning undefined");return undefined;}         //if index is out of range
+                if(index==this.length-1){arrInternal[index]=undefined;}
+                for(let i = index; i<this.length-1;i++){
+                    this.arrInternal[i]=this.arrInternal[i+1];
                 }
-                this.arrInternal=newArray;
             }
 
             ArrayList.prototype.insert = function(index,incData){
-                if(index>this.arrInternal.length||index<0){console.log("Index out of range exiting function");return;}
-                let newArray = [this.arrInternal.length+1]       //pretengind im initializing an array with a size one larger than the current array
-                for(let i = 0; i<this.arrInternal.length+1;i++){
-                    if(i>index){
-                        newArray[i]=this.arrInternal[i-1];
-                    } else if(i==index){                        //insert the data at the correct position
-                        newArray[i] = incData;
-                    }else{
-                        newArray[i]=this.arrInternal[i];
-                    }
+                if(index>this.length||index<0){console.log("Index out of range exiting returning undefined");return undefined;}
+                if(index==this.length-1){this.add(arrInternal[index]);this.arrInternal[index]=incData;return;} //if we are inserting at the last element of the array
+                for(let i = this.length; i>=index;i--){
+                    if(this.arrInternal[i]!=undefined){this.arrInternal[i+1]=this.arrInternal[i];}
                 }
-                this.arrInternal=newArray;
+                this.arrInternal[index]=incData;
             }
 
             ArrayList.prototype.print = function(){
                 let outText = "";
-                if(this.arrInternal.length<1){return "There are no elements in the current Array List";}
-                for(let i = 0;i<this.arrInternal.length;i++){
+                if(this.length<1){return "There are no elements in the current Array List";}
+                for(let i = 0;i<this.length;i++){
                     outText+=this.arrInternal[i]+" ";
                 }
                 return outText;
