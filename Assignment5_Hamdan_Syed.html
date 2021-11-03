@@ -7,24 +7,30 @@
             function ArrayList(){
                 this.arrInternal = [];
                 this.length = 0;        //length variable to keep track of array size to help simulate a fixed array size
+                this.maxLength = 0;
 
             }
             ArrayList.prototype.add = function(incData){
-                if(this.length==0){                 //if the arraylist has no elements in it yet
+                if(this.maxLength==0){                 //if the arraylist has no elements in it yet
                     let newArray = [];
                     newArray[0]=incData;
                     this.length+=1;
+                    this.maxLength+=1;
                     this.arrInternal = newArray;
                     return;
                 }
-                for(let i = 0; i<this.length;i++){
-                    if(this.arrInternal[i]==undefined){this.arrInternal[i]=incData;return;}//if the array is large enough to fit in a new element, just add it in
+                for(let i = 0; i<this.maxLength;i++){
+                    if(this.arrInternal[i]==undefined){
+                        this.arrInternal[i]=incData;
+                        this.length+=1;
+                        return;}//if the array is large enough to fit in a new element, just add it in
                 }
-                let newArray = [this.length*2]       //pretending i'm initializing an array with size one larger than the current array
-                this.length*=2;
-                for(let i = 0;i<=this.arrInternal.length;i++){  //copy values into the newly sized array,can still use the old array size for this
-                    if(i==this.arrInternal.length){   //at the end of the old array length
+                let newArray = [this.maxLength*2]       //pretending i'm initializing an array with size one larger than the current array
+                this.maxLength*=2;
+                for(let i = 0;i<=this.maxLength;i++){  //copy values into the newly sized array,can still use the old array size for this
+                    if(i==this.length){   //at the end of the old array length
                         newArray[i]=incData;
+                        this.length+=1;
                         break;                        //give it the incData
                     }
                     else{
@@ -35,16 +41,17 @@
             }
 
             ArrayList.prototype.get = function(index){
-                if(this.length<index||index<0){console.log("Index is out of range returning undefined");return undefined;}  //if index is out of range
+                if(this.maxLength<index||index<0){console.log("Index is out of range returning undefined");return undefined;}  //if index is out of range
                 return this.arrInternal[index];     //return the value at index including if its undefined as that is effectively an error state
             }
 
             ArrayList.prototype.delete = function(index){
-                if(index>this.length||index<0){console.log("index out of range returning undefined");return undefined;}         //if index is out of range
+                if(index>this.maxLength||index<0){console.log("index out of range returning undefined");return undefined;}         //if index is out of range
                 if(index==this.length-1){arrInternal[index]=undefined;}
                 for(let i = index; i<this.length-1;i++){
                     this.arrInternal[i]=this.arrInternal[i+1];
                 }
+                this.length-=1;
             }
 
             ArrayList.prototype.insert = function(index,incData){
@@ -54,11 +61,13 @@
                     if(this.arrInternal[i]!=undefined){this.arrInternal[i+1]=this.arrInternal[i];}
                 }
                 this.arrInternal[index]=incData;
+                this.length+=1;
             }
 
             ArrayList.prototype.print = function(){
                 let outText = "";
                 if(this.length<1){return "There are no elements in the current Array List";}
+                console.log("length: "+this.length+" max: "+this.maxLength);
                 for(let i = 0;i<this.length;i++){
                     outText+=this.arrInternal[i]+" ";
                 }
