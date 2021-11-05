@@ -1,0 +1,119 @@
+<html>
+    <head>
+        <script>
+            "use strict";
+            //The eating Spaghetti problem. You're going to set up a table with 5 thinkers at it. The thinkers each can eat spaghetti. When they eat 
+            //spaghetti they will eat it for 10milliseconds. They can only eat spaghetti if the two forks in front of them are unoccupied. After eating, they 
+            //must think for 20 milliseconds. Stop after everyone has eaten 100 times. We're going to have each one on their own thread, using 
+            //setTimeout with 0 milliseconds to repeatedly call its own logic. 
+            //we want it to run as long as possible without deadlock or starvation
+            //starvation if an eater does not eat for x amount of time they die
+            //deadlock, if all the forks are picked up and no one is able to eat
+            /*
+            start with just having the eaters being called to eat, worry about forks later
+            eater class
+            properties
+                const death timer (the they take to die if they do not eat)
+                count of times they have eaten
+                time since end of last meal
+                state variable, 4 possible situations, dead, eating, thinking, waiting, can hold this as a string
+
+            methods
+            eat
+            calc time since last meal
+            update time variable
+            if time variable equals death timer
+                this unit is dead
+            if time variable is less than death timer
+                state = eating
+                setTimeout 100ms state = thinking
+                setTimeout 300ms state = waiting
+                set time since end of last meal to now
+                        
+
+            program structure
+            main()
+            instantiate 5 eaters
+
+            while(any of the eaters are alive)
+            for(let i = 0){
+            if(thinker[i].state==waiting){  if the thinker is waiting to eat
+            eat
+            }
+            else don't
+            print states
+            }
+
+
+            */
+           let deathTimer = 50;
+            //timer that will result in death if they go this long without eating
+           function Fork(){
+               this.held = false;
+           }
+           //fork class, just check if it is being held
+           function Eater(fork1,fork2){
+               this.time = new Date().getTime();    //set time the eater was created so we can know how long from first meal
+               this.count = 0;                      //start eating count at 0
+               this.forks = [fork1,fork2];          //tell eater which forks he has available
+               this.state="waiting";                //useing 5 states: dead,waiting,eating,thinking,full
+           }
+           Eater.prototype.eat = function(){
+                if(this.count==100){this.state = "full";return;}    //if our eater is already full get out
+                let timeAtCall = new Date()
+                // console.log("time at call: "+timeAtCall.getTime());
+                // console.log("this.time: "+this.time);
+                // console.log("difference: "+(timeAtCall.getTime()-this.time));
+                if(timeAtCall.getTime()-this.time>=deathTimer){     //if our eater has gone too long without eating, die
+                    this.state = "dead";
+                }else if(this.forks[0].held==false&&this.forks[1].held==false){
+                    this.state ="eating";           //if there are forks available eat
+                    this.count+=1;
+                    this.forks[0].held=true;
+                    this.forks[1].held=true;        //if eater becomes full put down forks, set state to full
+                    if(this.count==100){this.state = "full";this.forks[0].held=false;this.forks[1].held=false;return;}
+                                                    //after 10ms of eating, they will be thinking for 20
+                    setTimeout(()=>{this.state="thinking";this.forks[0].held=false;this.forks[1].held=false;},10);
+                    //when they are done eating they will relinquish the forks
+                                                    //they will be waiting to see if they can eat again after they are done thinking
+                    setTimeout(()=>{this.state="waiting";},30);
+                    this.time = new Date().getTime();   //set a new time from end of meal
+                    //console.log("this.time after call: "+this.time);
+                }
+           }
+           function main(){
+               let forks = [new Fork(),new Fork(),new Fork(),new Fork(),new Fork()] //instantiate eaters into an array
+               let eaters = [new Eater(forks[0],forks[1]),new Eater(forks[1],forks[2]),new Eater(forks[2],forks[3]),new Eater(forks[3],forks[4]),new Eater(forks[4],forks[0])];
+                                                                                    //hard code a circle of forks specified to each eater, each fork can be potentially used by 2 different eaters
+               var interv = setInterval(() => {
+                    for(let i = 0;i<eaters.length;i++){
+                        if(eaters[i].state=="waiting"){                             //if the eater is waiting to eat, it will eat
+                            eaters[i].eat();
+                        }
+                    }
+                    console.log("1: "+eaters[0].state+" count: "+eaters[0].count+"| 2: "+eaters[1].state+" count: "+eaters[1].count+"| 3: "+eaters[2].state+" count: "+eaters[2].count+"| 4: "+
+                        eaters[3].state+" count: "+eaters[3].count+"| 5: "+eaters[4].state+" count: "+eaters[4].count);
+                    
+                    if((eaters[0].state=="full"||eaters[0].state=="dead")&&(eaters[1].state=="full"||eaters[1].state=="dead")
+                        &&(eaters[2].state=="full"||eaters[2].state=="dead")&&(eaters[3].state=="full"||eaters[3].state=="dead")&&(eaters[4].state=="full"||eaters[4].state=="dead")){
+                            clearInterval(interv);  //if all eaters are either full or dead, clear the interval
+                    }
+                    
+               }, 5);
+           }
+           
+           
+           
+
+
+
+        </script>
+
+
+    </head>
+    <div id = "container"></div>
+
+    <body onload="main()">
+    </body>
+
+</html>
