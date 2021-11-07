@@ -1,0 +1,135 @@
+<html>
+
+<head>
+    <script>
+        "use strict";
+        /*
+        Next you will be implementing common algorithms using recursion.
+
+        Recursion is when a function calls itself. Any algorithm can be implemented recursively or iteratively. Some are easier to implement one way,
+        some another.
+
+        Your functions should return a value to the user as appropriate and call no other functions other than themselves.
+
+        Write a function that sorts an array. (Mergesort and Quicksort are good examples)
+        Write a function that finds the max value in an array.
+        Write a function that prints out every element in an array
+        Write a function that returns the Greatest Common Divisor of two numbers
+        Write a function that reverses a string
+        Write a function that constructs a binary search tree of 20 random numbers. Then write a recursive function that searches that tree for a specific number.
+        */
+        function printArr(arr, index, str) {
+            if (index != arr.length) {
+                str += arr[index] + " ";
+                index += 1;
+            }
+            if (index == arr.length) {
+                return str;
+            }
+            return printArr(arr, index, str);
+        }
+        function gCD(num1, num2, divisor) {
+            if (num1 >= num2) {
+                if (divisor == -1) { divisor = num2; }
+                if (num1 % divisor == 0 && num2 % divisor == 0) {
+                    return divisor;
+                }
+                else {
+                    return gCD(num1, num2, (divisor - 1));
+                }
+            }
+            if (num1 < num2) {
+                if (divisor == -1) { divisor = num1; }
+                if (num1 % divisor == 0 && num2 % divisor == 0) {
+                    return divisor;
+                }
+                else {
+                    return gCD(num1, num2, (divisor - 1));
+                }
+            }
+        }
+
+        function mergeSort(arr) {
+            //we want to split the array in half
+            //again and again till were down to single elements
+            //compare the element to the element adjacent, if it is lower put it ahead
+            if (arr.length > 1) {
+                let holder;
+                let middleIndex = Math.ceil(arr.length / 2);
+                let split1 = arr.slice(0, middleIndex);
+                let split2 = arr.slice(-middleIndex)
+                mergeSort(split1);
+                mergeSort(split2);
+                for (let i = 0; i < split1.length; i++) {
+                    for (let k = 0; k < split1.length; k++) {
+                        if (split1[i] > split2[k]) {
+                            holder = split1[i];
+                            split1[i] = split2[k];
+                            split2[k] = holder;
+                        }
+                    }
+                }
+                for (let i = 0; i < split1.length; i++) {
+                    for (let k = i; k < split1.length; k++) {
+                        if (split2[i] > split2[k]) {
+                            holder = split2[i];
+                            split2[i] = split2[k];
+                            split2[k] = holder;
+                        }
+                    }
+                }
+                for (let i = 0; i < arr.length; i++) {
+                    if (i < split1.length) {
+                        arr[i] = split1[i];
+                    }
+                    else {
+                        arr[i] = split2[i - split1.length];
+                    }
+                }
+            }
+        }
+        function max(arr, incMax, index) {
+            if (arr[index] > incMax) { incMax = arr[index]; index += 1; }
+            else { index += 1; }
+            if (index == arr.length) { return incMax; }
+            return max(arr, incMax, index);
+        }
+        function print(arr, index) {
+            if (index == 0) {
+                return arr[index];
+            }
+        }
+
+        function main() {
+            let pepeHands = [0, 5, 1, 3, 4, 2, 7, 6, 0, 5, 1, 3, 4, 2, 7, 6]; //fix for the case of an odd amount of element
+            console.log("unsorted array");
+            console.log(pepeHands);
+            mergeSort(pepeHands);
+            console.log("sorted array");
+            console.log(pepeHands);
+            console.log("array to find max in");
+            pepeHands = [0, 5, 8, 3, 4, 20, 7, 6];
+            console.log(pepeHands);
+            console.log(max(pepeHands, pepeHands[0], 0));
+            console.log("checking GreatestCommonDenom func with: 5,11");
+            console.log(gCD(5, 11, -1));
+            console.log("checking GCD func with: 60,10");
+            console.log(gCD(60, 10, -1));
+            console.log("checking GCD func with: 60,25");
+            console.log(gCD(60, 25, -1));
+            console.log("printing the following array: ");
+            console.log(pepeHands);
+            console.log("my printed version: ");
+            console.log(printArr(pepeHands, 0, ""));
+        }
+
+
+    </script>
+</head>
+<div id="container"></div>
+
+<body onload="main()">
+
+</body>
+
+</html>
