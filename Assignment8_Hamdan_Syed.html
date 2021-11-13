@@ -94,15 +94,86 @@
             if (index == arr.length) { return incMax; }
             return max(arr, incMax, index);
         }
-        function print(arr, index) {
-            if (index == 0) {
-                return arr[index];
+
+        function BinaryTreeNode() {
+            this.data = null;
+            this.left = null;
+            this.right = null;
+        }
+        function BinaryTree() {
+            this.root = new BinaryTreeNode();
+        }
+        BinaryTree.prototype.add = function (data) {
+            if (this.root.data == null) {
+                console.log("giving root a value of: " + data);
+                this.root.data = data;
+            } else {
+                if (this.root.data >= data) {
+                    console.log("going left with: " + data);
+                    this.addToLeft(data, this.root.left);
+                }
+                else {
+                    console.log("going right with: " + data);
+                    this.addToRight(data, this.root.right)
+                }
+            }
+        }
+        BinaryTree.prototype.addToLeft = function (data, treeNode) {
+            if (treeNode == null) {
+                treeNode = new BinaryTreeNode();
+                console.log("(addToLeft)giving node data: " + data)
+                treeNode.data = data;
+                if (treeNode == null) { console.log("its somehow considered null"); }
+            } else {
+                if (treeNode.data >= data) {
+                    console.log("adding to left: " + data)
+                    this.addToLeft(data, treeNode.left);
+                }
+                else {
+                    console.log("adding to right: " + data)
+                    this.addToRight(data, treeNode.right)
+                }
+            }
+        }
+        BinaryTree.prototype.addToRight = function (data, treeNode) {
+            if (treeNode == null) {
+                console.log("(addToRight)giving node data: " + data)
+                treeNode = new BinaryTreeNode();
+                treeNode.data = data;
+                if (treeNode == null) { console.log("its somehow considered null"); }
+            } else {
+                if (treeNode.data <= data) {
+                    console.log("adding to right: " + data)
+                    this.addToRight(data, treeNode.right);
+                }
+                else {
+                    console.log("adding to left: " + data)
+                    this.addToLeft(data, treeNode.left);
+                }
+            }
+        }
+        BinaryTree.prototype.findNode = function (val, treeNode) {
+            if (treeNode == null) {
+                console.log("the value " + val + " isn't in the tree!")
+                return false;
+            }
+            if (treeNode.data == val) {
+                console.log("found the value");
+                return true;
+            }
+            if (val > treeNode.data) {
+                console.log("didn't find the value, current node value: " + treeNode.data + ", going to the right")
+                return this.findNode(val, treeNode.right);
+            }
+            else {
+                console.log("didn't find the value, current node value: " + treeNode.data + ", going to the left")
+                return this.findNode(val, treeNode.left);
             }
         }
 
         function main() {
-            let pepeHands = [0, 5, 1, 3, 4, 2, 7, 6, 0, 5, 1, 3, 4, 2, 7, 6]; //fix for the case of an odd amount of element
-            console.log("unsorted array");
+            let pepeHands = [10, 11, 9, 12, 8, 13, 5, 18, 6, 17, 7, 16, 14, 1, 2, 3, 4, 19, 20]; //fix for the case of an odd amount of element
+            /*console.log("unsorted array");
             console.log(pepeHands);
             mergeSort(pepeHands);
             console.log("sorted array");
@@ -120,7 +191,13 @@
             console.log("printing the following array: ");
             console.log(pepeHands);
             console.log("my printed version: ");
-            console.log(printArr(pepeHands, 0, ""));
+            console.log(printArr(pepeHands, 0, ""));*/
+            let pogTree = new BinaryTree();
+            for (let i = 0; i < pepeHands.length; i++) {
+                console.log(pepeHands[i])
+                pogTree.add(pepeHands[i]);
+            }
+            if (pogTree.findNode(10, pogTree.root)) { console.log("hey it worked"); }
         }
 
 
