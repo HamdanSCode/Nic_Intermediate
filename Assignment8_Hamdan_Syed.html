@@ -18,6 +18,14 @@
         Write a function that reverses a string
         Write a function that constructs a binary search tree of 20 random numbers. Then write a recursive function that searches that tree for a specific number.
         */
+        function reverse(orgStr, revStr) {
+            if (revStr.length == orgStr.length) {
+                return revStr;
+            }
+            revStr += orgStr.substr(-1 - revStr.length, 1);
+            return reverse(orgStr, revStr);
+        }
+
         function printArr(arr, index, str) {
             if (index != arr.length) {
                 str += arr[index] + " ";
@@ -28,6 +36,16 @@
             }
             return printArr(arr, index, str);
         }
+        /*
+        if I was to do the printArr line by line with just the array as a parameter
+        if arr.length == 0
+            return
+        console.log(arr[0])
+        printArr(arr.substr(1))
+        this way you print line by line the first element in the array
+        and you are passing the same array except the first element to the function on the next call
+        when it's finally at length 0 we would be done printing
+        */
         function gCD(num1, num2, divisor) {
             if (num1 >= num2) {
                 if (divisor == -1) { divisor = num2; }
@@ -55,11 +73,12 @@
             //compare the element to the element adjacent, if it is lower put it ahead
             if (arr.length > 1) {
                 let holder;
-                let middleIndex = Math.ceil(arr.length / 2);
+                let middleIndex = Math.floor(arr.length / 2);
                 let split1 = arr.slice(0, middleIndex);
-                let split2 = arr.slice(-middleIndex)
+                let split2 = arr.slice(middleIndex, arr.length);
                 mergeSort(split1);
                 mergeSort(split2);
+                //we have split the arrays CORRECTLY
                 for (let i = 0; i < split1.length; i++) {
                     for (let k = 0; k < split1.length; k++) {
                         if (split1[i] > split2[k]) {
@@ -94,110 +113,145 @@
             if (index == arr.length) { return incMax; }
             return max(arr, incMax, index);
         }
+        /*
+        if I was to redo this I would redo it similarly like the print array functions redo
+        in the sense that I would be passing it the array except the first element till its of size 0
+        I'm not sure how I would do it with only 1 parameter with the array
+        but it would definitely be doable with 2, that being the array, and the "current" max
+        if(arr length == 0){
+            return currentMax
+        }
+        if(arr[0]>currentMax) currentMax = arr[0]
+        return max(arr.substr(1),currentMax)
+        */
 
-        function BinaryTreeNode() {
-            this.data = null;
+        function BinaryTreeNode(data) {
+            this.data = data;
             this.left = null;
             this.right = null;
         }
         function BinaryTree() {
-            this.root = new BinaryTreeNode();
+            this.root;
         }
-        BinaryTree.prototype.add = function (data) {
-            if (this.root.data == null) {
-                console.log("giving root a value of: " + data);
+        BinaryTree.prototype.add = function (data, node) {
+            /*
+            if current node is undefined create a node at this location and give it the data
+            if the data should go into the node left current location
+                if the node to the left is null
+                    create a new node to the left and give it the data
+                    return
+                else
+                    call this function
+            else 
+                if to the right is null
+                    create a new node there and give it the data
+                    return
+                else 
+                    call the function from the node to the right
+            */
+            if (node == null) {
+                // console.log("this should be root");
+                this.root = new BinaryTreeNode();
                 this.root.data = data;
-            } else {
-                if (this.root.data >= data) {
-                    console.log("going left with: " + data);
-                    this.addToLeft(data, this.root.left);
+                return;
+            }
+            if (data > node.data) {
+                if (node.right == null) {
+                    // console.log("makeing a node to the right with: " + data);
+                    node.right = new BinaryTreeNode();
+                    node.right.data = data;
+                    return;
                 }
                 else {
-                    console.log("going right with: " + data);
-                    this.addToRight(data, this.root.right)
+                    // console.log("calling function and going to the right");
+                    this.add(data, node.right);
                 }
             }
-        }
-        BinaryTree.prototype.addToLeft = function (data, treeNode) {
-            if (treeNode == null) {
-                treeNode = new BinaryTreeNode();
-                console.log("(addToLeft)giving node data: " + data)
-                treeNode.data = data;
-                if (treeNode == null) { console.log("its somehow considered null"); }
-            } else {
-                if (treeNode.data >= data) {
-                    console.log("adding to left: " + data)
-                    this.addToLeft(data, treeNode.left);
+            else {
+                if (node.left == null) {
+                    // console.log("makeing a node to the left with: " + data);
+                    node.left = new BinaryTreeNode();
+                    node.left.data = data;
+                    return;
                 }
                 else {
-                    console.log("adding to right: " + data)
-                    this.addToRight(data, treeNode.right)
-                }
-            }
-        }
-        BinaryTree.prototype.addToRight = function (data, treeNode) {
-            if (treeNode == null) {
-                console.log("(addToRight)giving node data: " + data)
-                treeNode = new BinaryTreeNode();
-                treeNode.data = data;
-                if (treeNode == null) { console.log("its somehow considered null"); }
-            } else {
-                if (treeNode.data <= data) {
-                    console.log("adding to right: " + data)
-                    this.addToRight(data, treeNode.right);
-                }
-                else {
-                    console.log("adding to left: " + data)
-                    this.addToLeft(data, treeNode.left);
+                    // console.log("calling function and going to the left");
+                    this.add(data, node.left);
                 }
             }
         }
         BinaryTree.prototype.findNode = function (val, treeNode) {
-            if (treeNode == null) {
+            if (treeNode == null || treeNode == undefined) {
                 console.log("the value " + val + " isn't in the tree!")
                 return false;
-            }
-            if (treeNode.data == val) {
-                console.log("found the value");
-                return true;
             }
             if (val > treeNode.data) {
                 console.log("didn't find the value, current node value: " + treeNode.data + ", going to the right")
                 return this.findNode(val, treeNode.right);
             }
-            else {
+            else if (val < treeNode.data) {
                 console.log("didn't find the value, current node value: " + treeNode.data + ", going to the left")
                 return this.findNode(val, treeNode.left);
+            }
+            else {
+                console.log("found the value");
+                return true;
             }
         }
 
         function main() {
-            let pepeHands = [10, 11, 9, 12, 8, 13, 5, 18, 6, 17, 7, 16, 14, 1, 2, 3, 4, 19, 20]; //fix for the case of an odd amount of element
-            /*console.log("unsorted array");
+            let pepeHands = []; //fix for the case of an odd amount of element
+            for (let i = 0; i < 23; i++) {
+                pepeHands[i] = Math.floor(Math.random() * 15);
+            }
+            console.log("DEMONSTRATING merge sort----------------------------------------");
+            console.log("random unsorted array");
             console.log(pepeHands);
             mergeSort(pepeHands);
             console.log("sorted array");
             console.log(pepeHands);
+            console.log("Now with a premade array");
+            pepeHands = [20, 1, 15, 16, 17, 18, 19, 3, 4, 6, 2, 8, 9, 10, 5, 7, 11, 13, 12, 14]
+            console.log(pepeHands);
+            mergeSort(pepeHands);
+            console.log("sorted array");
+            console.log(pepeHands);
+            console.log("DEMONSTRATING reverse string----------------------------------------");
+            console.log("hel lo!");
+            console.log(reverse("hel lo!", ""));
+            console.log("DEMONSTRATING MAX----------------------------------------");
             console.log("array to find max in");
             pepeHands = [0, 5, 8, 3, 4, 20, 7, 6];
             console.log(pepeHands);
             console.log(max(pepeHands, pepeHands[0], 0));
+            console.log("DEMONSTRATING GREATES COMMON DENOMINATOR----------------------------------------");
             console.log("checking GreatestCommonDenom func with: 5,11");
             console.log(gCD(5, 11, -1));
             console.log("checking GCD func with: 60,10");
             console.log(gCD(60, 10, -1));
             console.log("checking GCD func with: 60,25");
             console.log(gCD(60, 25, -1));
+            console.log("DEMONSTRATING ARRAY PRINTING----------------------------------------");
             console.log("printing the following array: ");
             console.log(pepeHands);
             console.log("my printed version: ");
-            console.log(printArr(pepeHands, 0, ""));*/
+            console.log(printArr(pepeHands, 0, ""));
             let pogTree = new BinaryTree();
-            for (let i = 0; i < pepeHands.length; i++) {
-                console.log(pepeHands[i])
-                pogTree.add(pepeHands[i]);
+            for (let i = 0; i < 20; i++) {
+                pepeHands[i] = Math.floor(Math.random() * 11);
             }
-            if (pogTree.findNode(10, pogTree.root)) { console.log("hey it worked"); }
+            console.log("DEMONSTRATING BST----------------------------------------");
+            console.log("adding values to the tree");
+            for (let i = 0; i < pepeHands.length; i++) {
+                pogTree.add(pepeHands[i], pogTree.root);
+            }
+            console.log("the array:");
+            console.log(pepeHands);
+            for (let i = 0; i < 5; i++) {
+                let temp = Math.floor(Math.random() * 11);
+                console.log("seeking: " + temp);
+                if (pogTree.findNode(temp, pogTree.root)) { console.log("hey it worked"); }
+            }
         }
 
 
