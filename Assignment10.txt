@@ -1,0 +1,38 @@
+DEFAULTS:
+INSERT INTO `mydatabase`.`users` (`id`, `name`, `email`, `zip`, `accountcreated`) VALUES ('0', 'Hamdan', 'ffxftw01@gmail.com', '95014', '2021-12-08 13:08:30');
+INSERT INTO `mydatabase`.`users` (`id`, `name`, `email`, `zip`, `accountcreated`) VALUES ('1', 'Nic', 'mtear@gmail.com', '42069', '2021-12-08 13:08:55');
+INSERT INTO `mydatabase`.`users` (`id`, `name`, `email`, `zip`, `accountcreated`) VALUES ('2', 'Hassan', 'hassansm@gmail.com', '94040', '2021-12-08 13:09:25');
+INSERT INTO `mydatabase`.`users` (`id`, `name`, `email`, `zip`, `accountcreated`) VALUES ('3', 'Noelle', 'noshowup@neverever.com', '69420', '2021-12-08 13:17:40');
+INSERT INTO `mydatabase`.`users` (`id`, `name`, `email`, `zip`, `accountcreated`) VALUES ('4', 'Theflag', 'Theflag@gmail.com', '62341', '2021-12-08 13:19:10');
+
+
+
+all users:
+SELECT * FROM mydatabase.users;
+
+all users alphabeticaly:
+SELECT * FROM mydatabase.users order by name;
+
+all users reverse alphabeticaly:
+SELECT * FROM mydatabase.users order by name DESC;
+
+all users with a name larger than 5 charavters:
+SELECT * FROM mydatabase.users WHERE char_length(name)>5 order by accountcreated;
+
+all users with gmail emails:
+SELECT * FROM mydatabase.users WHERE email LIKE "%@gmail%"
+
+all users not with a gmail email:
+SELECT * FROM mydatabase.users WHERE email NOT LIKE "%@gmail%"
+
+just the zip:
+SELECT zip FROM mydatabase.users
+
+just unique zips:
+SELECT distinct zip FROM mydatabase.users
+
+name and account created:
+SELECT name, accountcreated FROM mydatabase.users
+
+finding Noelle
+SELECT * FROM mydatabase.users WHERE email = "noshowup@neverever.com" AND name = "Noelle"
